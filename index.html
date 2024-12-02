@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+       .login-container {
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           height: 100vh;
+           background: linear-gradient(to bottom, #e91e63, #2196f3);
+       }
+
+       .login-box {
+           background: white;
+           padding: 20px 40px;
+           border-radius: 8px;
+           text-align: center;
+           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+       }
+
+       .input-group {
+           margin: 10px 0;
+       }
+
+       input[type="email"],
+       input[type="password"] {
+           width: 100%;
+           padding: 10px;
+           margin: 5px 0;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+       }
+
+       button {
+           background: #e91e63;
+           color: white;
+           border: none;
+           padding: 10px 20px;
+           border-radius: 4px;
+           cursor: pointer;
+           width: 100%;
+       }
+
+       button:hover {
+           background: #d81b60;
+       }
+
+       .social-buttons button {
+           margin: 5px;
+           background: #3b5998; /* Azul do Facebook */
+           color: white;
+           border: none;
+           padding: 10px 15px;
+           border-radius: 4px;
+           cursor: pointer;
+       }
+
+       .social-buttons button:hover {
+           opacity: 0.9;
+       }
+
+       .social-buttons button:nth-child(2) {
+           background: #db4437; /* Vermelho do Google */
+       }
+
+       .checkbox-group {
+           margin: 10px 0;
+           text-align: left;
+       }
+
+       a {
+           color: #2196f3;
+           text-decoration: none;
+       }
+
+       a:hover {
+           text-decoration: underline;
+       }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>LOGIN</h2>
+            <form action="menuPrincipal.html" method="GET">
+                <div class="input-group">
+                    <input type="email" placeholder="Email" required />
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Password" required />
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember" />
+                    <label for="remember">Remember me</label>
+                </div>
+                <!-- Botão de Login -->
+                <button type="submit">LOGIN</button>
+            </form>
+            <p>Or login with</p>
+            <!-- Botões de login social -->
+            <div class="social-buttons">
+                <button type="button" onclick="alert('Login com Facebook ainda não implementado!')">Facebook</button>
+                <button type="button" onclick="alert('Login com Google ainda não implementado!')">Google</button>
+            </div>
+            <p>
+                Not a member? <a href="#">Sign up now</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

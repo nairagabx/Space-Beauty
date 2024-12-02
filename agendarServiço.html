@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Agenda</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #c69bec;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .calendar-section,
+    .time-section {
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .calendar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .calendar button {
+      background: none;
+      border: none;
+      color: #9c27b0;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .calendar button:hover {
+      color: #7b1fa2;
+    }
+
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .day {
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      background: #f3e5f5;
+      cursor: pointer;
+    }
+
+    .day:hover,
+    .day.selected {
+      background: #9c27b0;
+      color: #fff;
+    }
+
+    .schedule-times {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .time {
+      padding: 10px 15px;
+      background: #f3e5f5;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .time:hover,
+    .time.selected {
+      background: #9c27b0;
+      color: #fff;
+    }
+
+    .confirmation {
+      display: none;
+      text-align: center;
+    }
+
+    .confirmation h4 {
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
+
+    .confirmation .icon {
+      font-size: 3rem;
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
+
+    .confirmation .details {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .confirmation .details p {
+      margin: 5px 0;
+    }
+
+    .confirmation .policy {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #333;
+      text-align: left;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #9c27b0;
+      color: #fff;
+      border: none;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      background: #7b1fa2;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      border: 1px solid #9c27b0;
+      color: #9c27b0;
+      flex: 1;
+    }
+
+    .btn-secondary:hover {
+      background: #f3e5f5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Seção do Calendário e Horários -->
+    <div class="calendar-section">
+      <div class="calendar">
+        <button onclick="changeMonth(-1)">&#8592;</button>
+        <h3 id="currentMonth">Dezembro 2024</h3>
+        <button onclick="changeMonth(1)">&#8594;</button>
+      </div>
+      <div class="calendar-days" id="calendar-days">
+        <!-- Dias serão inseridos via JavaScript -->
+      </div>
+    </div>
+    <div class="time-section">
+      <h4>Horários Disponíveis</h4>
+      <div class="schedule-times" id="schedule-times">
+        <!-- Horários serão inseridos via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Tela de Confirmação -->
+    <div class="confirmation">
+      <div class="icon">✅</div>
+      <h4>Agendado com sucesso</h4>
+      <div class="details">
+        <p><strong>Horário:</strong> Ter, 17/Dez/2024 às 08:00</p>
+        <p><strong>Serviço(s):</strong> Alongamento: Fibra de vidro, Banho de Gel Luxo</p>
+        <p><strong>Valor:</strong> R$ 220,00</p>
+        <p><strong>Profissional:</strong> The Luxe</p>
+        <p>Você pode acompanhar todos os seus agendamentos através da opção "Meus Agendamentos".</p>
+      </div>
+      <div class="policy">
+        <strong>Política de Cancelamento:</strong> Querida cliente, compreendemos que imprevistos acontecem. Por favor, sinta-se à vontade para escolher outro horário.
+      </div>
+      <div class="buttons">
+        <button class="btn btn-secondary" onclick="location.href='estabelecimentos.html'">Agendar Novamente</button>
+        <button class="btn btn-primary" onclick="location.href='agendamentos.html'">Meus Agendamentos</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const calendarSection = document.querySelector('.calendar-section');
+    const timeSection = document.querySelector('.time-section');
+    const confirmation = document.querySelector('.confirmation');
+
+    function renderCalendar() {
+      const calendarDays = document.getElementById('calendar-days');
+      calendarDays.innerHTML = '';
+      for (let i = 1; i <= 31; i++) {
+        const day = document.createElement('div');
+        day.className = 'day';
+        day.textContent = i;
+        day.onclick = () => selectDay(i);
+        calendarDays.appendChild(day);
+      }
+    }
+
+    function selectDay(day) {
+      document.querySelectorAll('.day').forEach(el => el.classList.remove('selected'));
+      const selectedDay = document.getElementById('calendar-days').children[day - 1];
+      selectedDay.classList.add('selected');
+      renderTimes();
+    }
+
+    function renderTimes() {
+      const scheduleTimes = document.getElementById('schedule-times');
+      scheduleTimes.innerHTML = '';
+      const times = ['08:00', '10:00', '14:00', '16:00'];
+      times.forEach(time => {
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'time';
+        timeDiv.textContent = time;
+        timeDiv.onclick = () => selectTime(time);
+        scheduleTimes.appendChild(timeDiv);
+      });
+    }
+
+    function selectTime(time) {
+      document.querySelectorAll('.time').forEach(el => el.classList.remove('selected'));
+      event.target.classList.add('selected');
+      confirmBooking();
+    }
+
+    function confirmBooking() {
+      calendarSection.classList.add('hidden');
+      timeSection.classList.add('hidden');
+      confirmation.style.display = 'block';
+    }
+
+    renderCalendar();
+  </script>
+</body>
+
+</html>

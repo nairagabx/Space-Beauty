@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamentos</title>
+  <style>
+    /* Reset e configurações globais */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #c69bec;
+    }
+
+    /* Menu superior */
+    .top-menu {
+      background-color: #5a2dac;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .menu ul {
+      list-style: none;
+      display: flex;
+    }
+
+    .menu ul li {
+      margin: 0 10px;
+    }
+
+    .menu ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 1rem;
+      padding: 8px 15px;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .menu ul li a.active,
+    .menu ul li a:hover {
+      background-color: #7645e5;
+    }
+
+    .logout {
+      font-weight: bold;
+      color: #f7c8e0;
+    }
+
+    /* Conteúdo principal */
+    .content {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .tabs {
+      display: flex;
+    }
+
+    .tab {
+      background-color: #f3f3f3;
+      color: #333;
+      border: 1px solid #ddd;
+      padding: 10px 20px;
+      border-radius: 20px;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      background-color: #5a2dac;
+      color: white;
+      border-color: #5a2dac;
+    }
+
+    /* Aviso */
+    .alert {
+      background-color: #e8f4fc;
+      color: #007bb5;
+      padding: 15px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-bottom: 30px;
+    }
+
+    .whatsapp-icon {
+      color: #25d366;
+    }
+
+    /* Cartão de agendamento */
+    .appointment-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .professional {
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .service-name {
+      font-size: 1rem;
+      color: #777;
+    }
+
+    .details {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .appointment-info {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .whatsapp-btn,
+    .cancel-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: all 0.3s;
+    }
+
+    .whatsapp-btn {
+      background-color: #25d366;
+      color: white;
+    }
+
+    .cancel-btn {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #1eb34a;
+    }
+
+    .cancel-btn:hover {
+      background-color: #d32f2f;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      display: none;
+      z-index: 2000;
+    }
+
+    .modal.active {
+      display: block;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .modal-buttons button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal-buttons .yes {
+      background-color: #25d366;
+      color: white;
+    }
+
+    .modal-buttons .no {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header class="top-menu">
+    <div class="logo">Beauty Space</div>
+    <nav class="menu">
+      <ul>
+        <li><a href="meus-agendamentos.html" class="active">Meus Agendamentos</a></li>
+        <li><a href="estabelecimentos.html">Estabelecimentos</a></li>
+        <li><a href="https://www.gov.br/mdh/pt-br/acesso-a-informacao/politica-de-privacidade" target="_blank">Política de Privacidade</a></li>
+        <li><a href="conheca.html">Conheça o BeautySpace</a></li>
+        <li><a href="index.html" class="logout">Sair</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="content">
+    <header class="content-header">
+      <h1>Meus Agendamentos</h1>
+      <div class="tabs">
+        <button id="btn-atuais" class="tab active">Atuais</button>
+        <button id="btn-passados" class="tab">Passados</button>
+      </div>
+    </header>
+    <div id="appointment-container" class="appointment">
+      <div class="appointment-card">
+        <div class="professional">
+          <img src="427336983_1126068041913941_5892043299739055787_n.jpg" alt="Profile" class="profile-pic">
+          <div>
+            <h2>The Luxe</h2>
+            <p class="service-name">Manutenção de Luxo, Pé tradicional</p>
+            <p class="appointment-info">
+              <strong>Data:</strong> 15/12/2024<br>
+              <strong>Horário:</strong> 14:00<br>
+              <strong>Serviço:</strong> Manutenção de Luxo
+            </p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="whatsapp-btn" onclick="openWhatsApp()">WhatsApp</button>
+          <button class="cancel-btn" onclick="showModal()">Cancelar Agendamento</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal" class="modal">
+      <p>Tem certeza que deseja cancelar o agendamento?</p>
+      <div class="modal-buttons">
+        <button class="yes" onclick="cancelAppointment()">Sim</button>
+        <button class="no" onclick="closeModal()">Não</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function openWhatsApp() {
+      window.open("https://wa.me/5583993541658", "_blank");
+    }
+
+    function showModal() {
+      document.getElementById('modal').classList.add("active");
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove("active");
+    }
+
+    function cancelAppointment() {
+      const container = document.getElementById('appointment-container');
+      container.innerHTML = "<p>Agendamento cancelado com sucesso.</p>";
+      closeModal();
+    }
+  </script>
+</body>
+</html>
